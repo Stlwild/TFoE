@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fall of Empires – Three-File Version</title>
+  <!-- Link the external CSS -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Left Sidebar -->
+    <div class="left-sidebar">
+      <h3>Military Actions</h3>
+      <!-- Added emojis to each button -->
+      <button id="attackExpandBtn" onclick="actionAttackExpand()">⚔️ Attack / Expand<br>(2 AP + $900)</button>
+      <button id="spyDefBtn" onclick="actionSpyDef()">🔍 Spy / Def<br>(2 AP + 1 Intel)</button>
+      <button id="upgradeBaseBtn" onclick="upgradeBase()">🏰 Upgrade Base<br>(Tier×$300 + 1 Unity)</button>
+
+      <h3>General Actions</h3>
+      <button id="endTurnBtn" onclick="endTurn()">🔚 End Turn</button>
+
+      <div class="base-stats">
+        <!-- Changed to crossed swords & castle emojis -->
+        <div>⚔️ Base Str: <span id="baseStrDisplay">15</span></div>
+        <div>🏰 Tier: <span id="tierDisplay">1</span></div>
+      </div>
+
+      <!-- Wisdom and Intel moved here -->
+      <div class="research-stats">
+        <div>🧠 Wisdom: <span id="wisdomDisplay">0</span></div>
+        <div>🔍 Intel: <span id="intelDisplay">0</span></div>
+      </div>
+    </div>
+
+    <!-- Main Area -->
+    <div class="main-area">
+      <canvas id="mapCanvas" width="600" height="400"></canvas>
+      <div id="tooltip"></div>
+
+      <!-- Setup Panel for base selection -->
+      <!--  Highlight border and add yellow glow -->
+      <div id="setupPanel" style="text-align: center; margin-top:5px;">
+        <button style="box-shadow: 0 0 6px 3px rgba(255, 255, 0, 0.5); border: 2px solid yellow;"
+                onclick="confirmBaseSelection()">Confirm Base Selection</button>
+      </div>
+
+      <!-- Overlay for pre-game settings (initially hidden) -->
+      <div id="gameSetupOverlay" style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: rgba(34,34,34,0.9); padding: 10px 15px; border: 1px solid #555; border-radius: 3px; z-index: 10;
+          text-align: center; font-size: 12px;">
+        <label for="playerColor">Select Your Color:</label>
+        <select id="playerColor">
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="red">Red</option>
+          <option value="yellow">Yellow</option>
+          <option value="purple">Purple</option>
+          <option value="orange">Orange</option>
+        </select>
+        <label for="numOpponents">Number of Opponents (0-5):</label>
+        <input type="number" id="numOpponents" min="0" max="5" value="2">
+        <button onclick="startGame()">Start Game</button>
+      </div>
+      
+      <!-- EULA Overlay -->
+      <div id="eulaOverlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+          background: rgba(34,34,34,0.9); padding: 10px 15px; border: 1px solid #555; border-radius: 3px; z-index: 11;
+          text-align: center; font-size: 12px;">
+        <p>Free to play - Not to Replicate - Do you agree?</p>
+        <button id="agreeEulaBtn">I Agree</button>
+      </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="right-sidebar">
+      <h3>Diplomatic/Economic</h3>
+      <!-- Added emojis to each button -->
+      <button id="buyOilBtn" onclick="actionBuyOil()">🛢️ Buy Oil<br>(Cost: current Oil Price)</button>
+      <button id="sellOilBtn" onclick="actionSellOil()">💸 Sell Oil<br>(300 Oil => current Price)</button>
+      <button id="buyIntelBtn" onclick="actionBuyIntel()">🕵️ Buy Intel<br>(900 Oil + 1 AP)</button>
+      <button id="getWiseBtn" onclick="actionGetWise()">🧠 Get Wise<br>(Cost: $900 + 1 AP)</button>
+      <button id="createUnityBtn" onclick="actionCreateUnity()">🤝 Create Unity<br>(1 Wis + 1 Intel)</button>
+      <button id="investRoiBtn" onclick="actionInvestROI()">💹 Invest ROI<br>(Cost: 5 Wisdom)</button>
+
+      <!-- Unity and ROI moved here from bottom bar -->
+      <div class="misc-stats">
+        <div>🤝 Unity: <span id="unityDisplay">0</span></div>
+        <div>📈 ROI: <span id="roiDisplay">+200%</span></div>
+      </div>
+
+      <!-- Where spy/def reveals stats -->
+      <div id="spyInfo" class="spy-info"></div>
+    </div>
+  </div>
+
+  <!-- Bottom container -->
+  <div class="bottom-container">
+    <div class="stats-bar">
+      <!-- Reduced size/spacing since we only show a few stats now -->
+      <div class="tfoe-title">TFoE</div>
+      <div class="stats-container">
+        <div class="top-stats">
+          <div class="stat ap">⚡ AP: <span id="apDisplay">0</span></div>
+        </div>
+        <div class="bottom-stats">
+          <div class="stat">🛢️ Oil: <span id="oilDisplay">000</span></div>
+          <div class="stat">💰 Gold: <span id="goldDisplay">1200</span></div>
+          <!-- Changed vote emoji to a letter (✉️) -->
+          <div class="stat">✉️ Votes: <span id="votesDisplay">0</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Small log so no scrolling needed -->
+    <div id="phase-log-container">
+      <div id="log"></div>
+    </div>
+  </div>
+
+  <!-- Link the external JS file -->
+  <script src="game.js"></script>
+  <script>
+    // When the player clicks the "I Agree" button on the EULA,
+    // hide the EULA overlay and show the game start popup.
+    document.getElementById('agreeEulaBtn').addEventListener('click', function() {
+      document.getElementById('eulaOverlay').style.display = 'none';
+      document.getElementById('gameSetupOverlay').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
